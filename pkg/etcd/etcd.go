@@ -69,7 +69,7 @@ var (
 const (
 	snapshotPrefix      = "etcd-snapshot-"
 	endpoint            = "https://127.0.0.1:2379"
-	testTimeout         = time.Second * 10
+	testTimeout         = time.Second * 90
 	manageTickerTime    = time.Second * 15
 	learnerMaxStallTime = time.Minute * 5
 
