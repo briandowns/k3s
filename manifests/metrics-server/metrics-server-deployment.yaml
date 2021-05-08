@@ -39,7 +39,7 @@ spec:
         emptyDir: {}
       containers:
       - name: metrics-server
-        image: rancher/metrics-server:v0.3.6
+        image: rancher/hardened-k8s-metrics-server:v0.3.6-build20210223
         volumeMounts:
         - name: tmp-dir
           mountPath: /tmp

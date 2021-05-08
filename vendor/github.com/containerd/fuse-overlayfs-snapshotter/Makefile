@@ -22,7 +22,7 @@ PKG_MAIN := github.com/containerd/fuse-overlayfs-snapshotter/cmd/containerd-fuse
 PKG_VERSION := github.com/containerd/fuse-overlayfs-snapshotter/cmd/containerd-fuse-overlayfs-grpc/version
 
 GO ?= go
-export GO_BUILD=GO111MODULE=on CGO_ENABLED=0 $(GO) build -ldflags "-s -w -X $(PKG_VERSION).Version=$(VERSION) -X $(PKG_VERSION).Revision=$(REVISION)"
+export GO_BUILD=GO111MODULE=on CGO_ENABLED=1 $(GO) build -ldflags "-s -w -X $(PKG_VERSION).Version=$(VERSION) -X $(PKG_VERSION).Revision=$(REVISION)"
 
 bin/containerd-fuse-overlayfs-grpc:
 	$(GO_BUILD) -o $@ $(PKG_MAIN)

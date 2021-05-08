@@ -111,7 +111,7 @@ spec:
         beta.kubernetes.io/os: linux
       containers:
       - name: coredns
-        image: rancher/coredns-coredns:1.8.3
+        image: rancher/hardened-coredns:v1.6.9-build20210223
         imagePullPolicy: IfNotPresent
         resources:
           limits:

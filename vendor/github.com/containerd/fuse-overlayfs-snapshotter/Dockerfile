@@ -23,7 +23,7 @@ ARG ALPINE_VERSION=3.13
 FROM golang:${GO_VERSION}-alpine AS containerd-fuse-overlayfs-test
 COPY . /go/src/github.com/containerd/fuse-overlayfs-snapshotter
 WORKDIR  /go/src/github.com/containerd/fuse-overlayfs-snapshotter
-ENV CGO_ENABLED=0
+ENV CGO_ENABLED=1
 ENV GO111MODULE=on
 RUN mkdir /out && go test -c -o /out/containerd-fuse-overlayfs.test
 
@@ -46,7 +46,7 @@ RUN git clone https://github.com/rootless-containers/rootlesskit.git /go/src/git
 WORKDIR /go/src/github.com/rootless-containers/rootlesskit
 ARG ROOTLESSKIT_COMMIT
 RUN git pull && git checkout ${ROOTLESSKIT_COMMIT}
-ENV CGO_ENABLED=0
+ENV CGO_ENABLED=1
 RUN mkdir /out && go build -o /out/rootlesskit github.com/rootless-containers/rootlesskit/cmd/rootlesskit 
 
 FROM alpine:${ALPINE_VERSION} AS idmap

@@ -10,7 +10,7 @@ if [[ "${1:-}" = "--in-vm" ]]; then
 
   mount -t bpf bpf /sys/fs/bpf
   mount -t tracefs tracefs /sys/kernel/debug/tracing
-  export CGO_ENABLED=0
+  export CGO_ENABLED=1
   export GOFLAGS=-mod=readonly
   export GOPATH=/run/go-path
   export GOPROXY=file:///run/go-path/pkg/mod/cache/download

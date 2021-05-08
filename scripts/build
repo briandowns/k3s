@@ -34,7 +34,7 @@ VERSIONFLAGS="
     -X ${VENDOR_PREFIX}${PKG_CRICTL}/pkg/version.Version=${VERSION_CRICTL}
 "
 LDFLAGS="
-    -w -s"
+    -w"
 STATIC="
     -extldflags '-static'
 "
@@ -62,11 +62,6 @@ else
 fi
 
 mkdir -p bin
-
-if [ ${ARCH} = armv7l ] || [ ${ARCH} = arm ]; then
-    export GOARCH="arm"
-    export GOARM="7"
-fi
 
 rm -f \
     bin/k3s-agent \
@@ -97,7 +92,7 @@ if [ ! -x ${INSTALLBIN}/cni ]; then
     WORKDIR=$TMPDIR/src/github.com/containernetworking/plugins
     git clone -b $VERSION_CNIPLUGINS https://github.com/rancher/plugins.git $WORKDIR
     cd $WORKDIR
-    GOPATH=$TMPDIR CGO_ENABLED=0 "${GO}" build -tags "$TAGS" -ldflags "$LDFLAGS $STATIC" -o $INSTALLBIN/cni
+    GOPATH=$TMPDIR CGO_ENABLED=1 "${GO}" build -tags "$TAGS" -ldflags "$LDFLAGS $STATIC" -o $INSTALLBIN/cni
 )
 fi
 # echo Building agent
@@ -116,6 +111,17 @@ ln -s containerd ./bin/ctr
 #CGO_ENABLED=1 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC_SQLITE" -o bin/ctr ./cmd/ctr/main.go
 # echo Building containerd
 # CGO_ENABLED=0 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC" -o bin/containerd ./cmd/containerd/
+
+# assert that k3s is fully statically linked
+if type -a go-assert-static.sh >/dev/null 2>&1; then
+    go-assert-static.sh bin/containerd
+fi
+
+# assert that k3s is linked to goboring
+if type -a go-assert-boring.sh >/dev/null 2>&1; then
+    go-assert-boring.sh bin/containerd
+fi
+
 echo Building runc
 rm -f ./vendor/github.com/opencontainers/runc/runc
 make EXTRA_LDFLAGS="-w -s" BUILDTAGS="$RUNC_TAGS" -C ./vendor/github.com/opencontainers/runc $RUNC_STATIC
@@ -130,3 +136,8 @@ echo Building containerd-shim-runc-v2
 rm -f ./vendor/github.com/containerd/containerd/bin/containerd-shim-runc-v2
 make -C ./vendor/github.com/containerd/containerd bin/containerd-shim-runc-v2
 cp -f ./vendor/github.com/containerd/containerd/bin/containerd-shim-runc-v2 ./bin/containerd-shim-runc-v2
+
+
+# Replace the above with the contents of
+# https://hub.docker.com/layers/rancher/hardened-containerd/v1.3.10-k3s4-build20210401/images/sha256-ffa5693a870439d9c98ecdcd1c5fc73b34d35433fa432ae2bab49b56050ddd8c?context=explore
+# and put this in the final container build
