@@ -37,7 +37,12 @@ func main() {
 		cmds.NewCtrCommand(externalCLIAction("ctr")),
 		cmds.NewCheckConfigCommand(externalCLIAction("check-config")),
 		cmds.NewEtcdSnapshotCommand(wrap(version.Program+"-"+cmds.EtcdSnapshotCommand, os.Args)),
-		cmds.NewEtcdSnapshotCommand(etcdsnapshotCommand, cmds.NewEtcdSnapshotSubcommands(etcdsnapshotCommand, etcdsnapshotCommand)),
+		cmds.NewEtcdSnapshotCommand(etcdsnapshotCommand,
+			cmds.NewEtcdSnapshotSubcommands(
+				etcdsnapshotCommand,
+				etcdsnapshotCommand,
+				etcdsnapshotCommand),
+		),
 	}
 
 	if err := app.Run(os.Args); err != nil {
