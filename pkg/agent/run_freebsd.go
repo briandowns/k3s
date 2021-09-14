@@ -21,16 +21,15 @@ const (
 // with the given data from config.
 func setupCriCtlConfig(cfg cmds.Agent, nodeConfig *config.Node) error {
 	cre := nodeConfig.ContainerRuntimeEndpoint
-	if cre == "" || strings.HasPrefix(cre, "npipe:") {
+	if cre == "" {
 		switch {
 		case cfg.Docker:
 			cre = dockershimSock
 		default:
 			cre = containerdSock
 		}
-	} else {
-		cre = containerdSock
 	}
+
 	agentConfDir := filepath.Join(cfg.DataDir, "agent", "etc")
 	if _, err := os.Stat(agentConfDir); os.IsNotExist(err) {
 		if err := os.MkdirAll(agentConfDir, 0700); err != nil {
@@ -39,5 +38,5 @@ func setupCriCtlConfig(cfg cmds.Agent, nodeConfig *config.Node) error {
 	}
 
 	crp := "runtime-endpoint: " + cre + "\n"
-	return ioutil.WriteFile(filepath.Join(agentConfDir, "crictl.yaml"), []byte(crp), 0600)
+	return ioutil.WriteFile(agentConfDir+"/crictl.yaml", []byte(crp), 0600)
 }

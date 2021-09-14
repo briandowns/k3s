@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Microsoft/hcsshim"
 	"github.com/rancher/k3s/pkg/daemons/config"
 	"github.com/rancher/k3s/pkg/util"
 	"github.com/sirupsen/logrus"
