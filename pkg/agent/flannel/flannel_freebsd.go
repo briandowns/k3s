@@ -28,11 +28,6 @@ import (
 	"github.com/flannel-io/flannel/subnet/kube"
 	"golang.org/x/net/context"
 	log "k8s.io/klog"
-
-	// Backends need to be imported for their init() to get executed and them to register
-	_ "github.com/flannel-io/flannel/backend/extension"
-	_ "github.com/flannel-io/flannel/backend/hostgw"
-	_ "github.com/flannel-io/flannel/backend/ipsec"
 )
 
 const (
